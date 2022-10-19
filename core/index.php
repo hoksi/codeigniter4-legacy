@@ -1,6 +1,8 @@
 <?php
 
 // Check PHP version.
+use Config\Services;
+
 $minPhpVersion = '7.4'; // If you update this, don't forget to update `spark`.
 if (version_compare(PHP_VERSION, $minPhpVersion, '<')) {
     $message = sprintf(
@@ -40,18 +42,3 @@ require rtrim($paths->systemDirectory, '\\/ ') . DIRECTORY_SEPARATOR . 'bootstra
 // Load environment settings from .env files into $_SERVER and $_ENV
 require_once SYSTEMPATH . 'Config/DotEnv.php';
 (new CodeIgniter\Config\DotEnv(ROOTPATH))->load();
-
-/*
- * ---------------------------------------------------------------
- * GRAB OUR CODEIGNITER INSTANCE
- * ---------------------------------------------------------------
- *
- * The CodeIgniter class contains the core functionality to make
- * the application run, and does all of the dirty work to get
- * the pieces all working together.
- */
-
-$app = Config\Services::codeigniter();
-$app->initialize();
-$context = is_cli() ? 'php-cli' : 'web';
-$app->setContext($context);
