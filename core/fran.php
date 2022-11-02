@@ -16,9 +16,8 @@ if (version_compare(PHP_VERSION, $minPhpVersion, '<')) {
 
 // Path to the front controller (this file)
 define('FCPATH', __DIR__ . DIRECTORY_SEPARATOR);
+define('FRAN_CORE_PATH', FCPATH);
 
-// Ensure the current directory is pointing to the front controller's directory
-chdir(FCPATH);
 
 /*
  *---------------------------------------------------------------
@@ -42,3 +41,23 @@ require rtrim($paths->systemDirectory, '\\/ ') . DIRECTORY_SEPARATOR . 'bootstra
 // Load environment settings from .env files into $_SERVER and $_ENV
 require_once SYSTEMPATH . 'Config/DotEnv.php';
 (new CodeIgniter\Config\DotEnv(ROOTPATH))->load();
+
+function qb($dbType = 'mysql', $config = [], $share = true) : \Fran\QueryBuilder
+{
+    if ($share === false) {
+        return new \Fran\QueryBuilder($dbType, $config);
+    }
+
+    static $qb = false;
+
+    if ($qb === false) {
+        $qb = new \Fran\QueryBuilder($dbType, $config);
+    }
+
+    return $qb;
+}
+
+function rqwSql($sql) : \CodeIgniter\Database\RawSql
+{
+    return new \CodeIgniter\Database\RawSql($sql);
+}
